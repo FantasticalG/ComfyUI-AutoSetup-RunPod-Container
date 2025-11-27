@@ -16,7 +16,14 @@ echo "Using setup repo: $TARGET_REPO"
 # -----------------------------
 # Pull latest setup scripts
 # -----------------------------
-if [ ! -d "$TARGET_REPO" ]; then
+# Remove partial/broken setup folder
+if [ -d "$SETUP_DIR" ] && [ ! -d "$SETUP_DIR/.git" ]; then
+  log "[COMFYUI AUTO SETUP] Removing incomplete setup at $SETUP_DIR"
+  rm -rf "$SETUP_DIR"
+fi
+
+# Clone or pull latest setup
+if [ ! -d "$SETUP_DIR" ]; then
     git clone "$TARGET_REPO" "$SETUP_DIR"
     cd "$SETUP_DIR"
 else
