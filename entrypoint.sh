@@ -24,7 +24,7 @@ fi
 
 # Clone or pull latest setup
 if [ ! -d "$SETUP_DIR" ]; then
-    git clone "$TARGET_REPO" "$SETUP_DIR"
+    git clone --depth 1 "$TARGET_REPO" "$SETUP_DIR"
     cd "$SETUP_DIR"
 else
     cd "$SETUP_DIR"
