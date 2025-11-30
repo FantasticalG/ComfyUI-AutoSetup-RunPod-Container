@@ -18,13 +18,13 @@ echo "Using setup repo: $TARGET_REPO"
 # -----------------------------
 # Remove partial/broken setup folder
 if [ -d "$SETUP_DIR" ] && [ ! -d "$SETUP_DIR/.git" ]; then
-  log "[COMFYUI AUTO SETUP] Removing incomplete setup at $SETUP_DIR"
+  log "[INFO] Removing incomplete setup at $SETUP_DIR"
   rm -rf "$SETUP_DIR"
 fi
 
 # Clone or pull latest setup
 if [ ! -d "$SETUP_DIR" ]; then
-    git clone --depth 1 "$TARGET_REPO" "$SETUP_DIR"
+    git clone "$TARGET_REPO" "$SETUP_DIR"
     cd "$SETUP_DIR"
 else
     cd "$SETUP_DIR"
@@ -35,10 +35,10 @@ fi
 # Update/Install unless skipped
 # -----------------------------
 if [ "$SKIP_UPDATE" != "1" ]; then
-    echo "[SETUP] Running install/update…"
+    echo "[INFO] Running install/update…"
     "${SETUP_DIR}/scripts/install_all.sh"  # run install/update
 else
-    echo "[SETUP] SKIP_UPDATE=1 → skipping installation/update."
+    echo "[INFO] SKIP_UPDATE=1 → skipping installation/update."
 fi
 
 # --- Function to start Jupyter Lab ---
