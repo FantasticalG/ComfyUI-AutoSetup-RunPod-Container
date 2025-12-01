@@ -6,8 +6,12 @@ RUN apt-get update && apt-get install -y \
     git curl wget python3 python3-pip python3-venv \
     && rm -rf /var/lib/apt/lists/*
 
-# LibGL OpenCV dependency for VideoHelperSuite extension
-RUN apt-get update && apt-get install -y libgl1 && rm -rf /var/lib/apt/lists/*
+# VideoHelperSuite extension dependencies
+RUN apt-get install -y \
+        libgl1 \
+        libglib2.0-0 \
+        ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
 
 # Create venv for ComfyUI
 RUN python3 -m venv /opt/comfy_venv --system-site-packages
