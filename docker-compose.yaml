@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  comfy:
+    build: .
+    container_name: comfy
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+    environment:
+      # Optional overrides
+      SETUP_REPO: https://github.com/FantasticalG/ComfyUI-AutoSetup-Script
+      INSTALL_DIR: /workspace/ComfyUI
+      SKIP_UPDATE: "0"
+      CIVITAI_API_KEY: "${CIVITAI_API_KEY}"
+      HUGGINGFACE_API_KEY: "${HUGGINGFACE_API_KEY}"
+
+    ports:
+      - "8188:8188"   # ComfyUI
+      - "8888:8888"   # JupyterLab
+
+    volumes:
+      # Everything installed into install dir = persistent
+      - ./data:/workspace
+
+    runtime: nvidia
