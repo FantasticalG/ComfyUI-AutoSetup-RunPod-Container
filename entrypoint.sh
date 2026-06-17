@@ -1,5 +1,5 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -eo pipefail
 
 # -----------------------------
 # Config / defaults
@@ -18,10 +18,10 @@ echo "Using setup repo: $TARGET_REPO"
 # -----------------------------
 # Clone or update the setup repo. SAFETY: never delete anything — if the path
 # exists but is not a git repo and is not empty, abort instead of removing it.
-if [ -d "$SETUP_DIR/.git" ]; then
+if [[ -d "$SETUP_DIR/.git" ]]; then
     cd "$SETUP_DIR"
     git fetch && git pull
-elif [ -d "$SETUP_DIR" ] && [ -n "$(ls -A "$SETUP_DIR" 2>/dev/null)" ]; then
+elif [[ -d "$SETUP_DIR" && -n "$(ls -A "$SETUP_DIR" 2>/dev/null)" ]]; then
     echo "[ERROR] '$SETUP_DIR' exists, is not a git repo, and is not empty — refusing to modify it."
     exit 1
 else
@@ -35,7 +35,7 @@ python "${SETUP_DIR}/scripts/helper/cuda_check.py" || true
 # -----------------------------
 # Update/Install unless skipped
 # -----------------------------
-if [ "$SKIP_UPDATE" != "1" ]; then
+if [[ "$SKIP_UPDATE" != "1" ]]; then
     echo "[INFO] Running install/update…"
     "${SETUP_DIR}/scripts/install_all.sh"  # run install/update
 else
