@@ -16,19 +16,17 @@ echo "Using setup repo: $TARGET_REPO"
 # -----------------------------
 # Pull latest setup scripts
 # -----------------------------
-# Remove partial/broken setup folder
-if [ -d "$SETUP_DIR" ] && [ ! -d "$SETUP_DIR/.git" ]; then
-  log "[INFO] Removing incomplete setup at $SETUP_DIR"
-  rm -rf "$SETUP_DIR"
-fi
-
-# Clone or pull latest setup
-if [ ! -d "$SETUP_DIR" ]; then
-    git clone "$TARGET_REPO" "$SETUP_DIR"
-    cd "$SETUP_DIR"
-else
+# Clone or update the setup repo. SAFETY: never delete anything — if the path
+# exists but is not a git repo and is not empty, abort instead of removing it.
+if [ -d "$SETUP_DIR/.git" ]; then
     cd "$SETUP_DIR"
     git fetch && git pull
+elif [ -d "$SETUP_DIR" ] && [ -n "$(ls -A "$SETUP_DIR" 2>/dev/null)" ]; then
+    echo "[ERROR] '$SETUP_DIR' exists, is not a git repo, and is not empty — refusing to modify it."
+    exit 1
+else
+    git clone "$TARGET_REPO" "$SETUP_DIR"
+    cd "$SETUP_DIR"
 fi
 
 echo "[INFO] Running CUDA diagnostics..."
