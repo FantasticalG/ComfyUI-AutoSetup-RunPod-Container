@@ -67,7 +67,8 @@ start_comfy() {
     echo "[INFO] Starting ComfyUI..."
     python "$COMFY_DIR/main.py" \
         --listen 0.0.0.0 \
-        --port 8188 &
+        --port 8188 \
+        --enable-cors-header '*' &  # bypass strict host/origin check so the RunPod proxy works (see README troubleshooting)
     COMFY_PID=$!
     echo "[INFO] ComfyUI PID = $COMFY_PID started on port 8188"
 }

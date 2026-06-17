@@ -69,12 +69,16 @@ docker compose up --build
 ## Accessing the services
 
 - **ComfyUI** — port `8188`.
-- **JupyterLab** — port `8888`, started with its root at `/workspace` and no token/password (rely on your network/RunPod access controls).
+- **JupyterLab** — port `8888`, started with its root at `/workspace` and no token/password.
 
 Both run in the background; if either exits, the container shuts down so the pod can restart cleanly.
 
-> ⚠️ **Security warning — do not expose these ports to the public internet.**
-> JupyterLab is started with **no token and no password** (`--ServerApp.token='' --ServerApp.password='' --ServerApp.allow_origin='*'`), and both services bind `0.0.0.0`. Anyone who can reach port **8888** gets arbitrary code execution (effectively root) on the GPU host, and port **8188** exposes the full ComfyUI API. This is only safe behind RunPod's authenticated proxy or a trusted private network. If you map these ports directly (e.g. local `docker run -p`, a public VPS), put them behind authentication / a firewall, or set a Jupyter token. See [docs/known-issues.md](https://github.com/FantasticalG/ComfyUI-AutoSetup-Script/blob/main/docs/known-issues.md).
+> ℹ️ **Note on access — the RunPod proxy URL is public.** RunPod exposes each port at
+> `https://<pod-id>-<port>.proxy.runpod.net`. This URL is **not gated by your RunPod login** — the
+> pod ID just provides obscurity, so anyone you share the link with can reach the service from any
+> device (and ComfyUI has no built-in authentication). This is the same open setup most RunPod
+> ComfyUI templates ship with, so it's fine for typical solo/trusted use — just treat the proxy URL
+> as a secret and don't post it publicly.
 
 ## Persistence
 
@@ -92,6 +96,7 @@ Fork [ComfyUI-AutoSetup-Script](https://github.com/FantasticalG/ComfyUI-AutoSetu
 | Very slow startup | First boot installs everything. Use a persistent volume and set `SKIP_UPDATE=1` on later runs. |
 | Models re-download every boot | The workspace isn't persisted — mount a volume at `/workspace`. |
 | Gated / CivitAI model fails to download | Set `HUGGINGFACE_API_KEY` / `CIVITAI_API_KEY`. |
+| ComfyUI tab shows **HTTP ERROR 403 / authorisation denied** (JupyterLab works) | Recent ComfyUI enforces strict Host/Origin matching, which the RunPod proxy trips. The entrypoint launches ComfyUI with `--enable-cors-header '*'` to bypass it. If you run a custom command, add that flag. See [docs/known-issues.md](https://github.com/FantasticalG/ComfyUI-AutoSetup-Script/blob/main/docs/known-issues.md). |
 
 ## Documentation
 

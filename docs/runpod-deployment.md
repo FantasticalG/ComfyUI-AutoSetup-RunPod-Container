@@ -24,7 +24,7 @@ The image is designed to run as a RunPod GPU pod.
 
 3. **First boot is slow.** The entrypoint clones the setup repo and runs the full install (ComfyUI + extensions + models). Expect a long first start while large models download. Subsequent boots with `SKIP_UPDATE=1` skip straight to launching the services.
 
-4. **Access the services** via the proxied URLs RunPod assigns to ports 8188 and 8888. JupyterLab is started with no token/password and its root set to `/workspace`, so it is reachable directly behind RunPod's own access controls.
+4. **Access the services** via the proxied URLs RunPod assigns to ports 8188 and 8888 (`https://<pod-id>-<port>.proxy.runpod.net`). JupyterLab is started with no token/password and its root set to `/workspace`. Note that these proxy URLs are **public** — they are not gated by your RunPod login (the pod ID only provides obscurity), so anyone with the link can reach the service. This is the norm for RunPod ComfyUI templates; treat the URL as a secret. For private access, deploy with no exposed HTTP ports and use an SSH tunnel instead.
 
 ## Boot sequence
 
