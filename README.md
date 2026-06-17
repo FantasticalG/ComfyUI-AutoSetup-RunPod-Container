@@ -73,6 +73,9 @@ docker compose up --build
 
 Both run in the background; if either exits, the container shuts down so the pod can restart cleanly.
 
+> ⚠️ **Security warning — do not expose these ports to the public internet.**
+> JupyterLab is started with **no token and no password** (`--ServerApp.token='' --ServerApp.password='' --ServerApp.allow_origin='*'`), and both services bind `0.0.0.0`. Anyone who can reach port **8888** gets arbitrary code execution (effectively root) on the GPU host, and port **8188** exposes the full ComfyUI API. This is only safe behind RunPod's authenticated proxy or a trusted private network. If you map these ports directly (e.g. local `docker run -p`, a public VPS), put them behind authentication / a firewall, or set a Jupyter token. See [docs/known-issues.md](https://github.com/FantasticalG/ComfyUI-AutoSetup-Script/blob/main/docs/known-issues.md).
+
 ## Persistence
 
 All installed data lives under `/workspace/ComfyUI`. Mounting a volume at `/workspace` (the `./data` bind mount above, or a RunPod network volume) preserves ComfyUI, extensions, and downloaded models across restarts. Combined with `SKIP_UPDATE=1`, restarts become near-instant.
@@ -93,6 +96,7 @@ Fork [ComfyUI-AutoSetup-Script](https://github.com/FantasticalG/ComfyUI-AutoSetu
 ## Documentation
 
 - [docs/runpod-deployment.md](docs/runpod-deployment.md) — RunPod platform deployment steps, boot sequence, and image internals.
+- [Known issues & roadmap](https://github.com/FantasticalG/ComfyUI-AutoSetup-Script/blob/main/docs/known-issues.md) — limitations and planned improvements (covers both repos).
 - Setup script docs: [configuration](https://github.com/FantasticalG/ComfyUI-AutoSetup-Script/blob/main/docs/configuration.md) · [architecture](https://github.com/FantasticalG/ComfyUI-AutoSetup-Script/blob/main/docs/architecture.md) · [workflows](https://github.com/FantasticalG/ComfyUI-AutoSetup-Script/blob/main/docs/workflows.md).
 
 ## License
