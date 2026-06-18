@@ -65,6 +65,7 @@ docker compose up --build
 | `TARGET_DATE` | Target date for deterministic installs (`yyyy-mm-dd`) | latest commit in the setup repo |
 | `CIVITAI_API_KEY` | Token for CivitAI model downloads | not set |
 | `HUGGINGFACE_API_KEY` | Token for HuggingFace downloads | not set |
+| `SKIP_MODELS` | Skip models whose URL/filename matches the filter, e.g. `wan,animate;qwen` (`;` = OR groups, `,` = AND within a group) | not set (download all) |
 
 ## Accessing the services
 
