@@ -11,6 +11,12 @@ SETUP_DIR="/opt/setup"
 # Install dir used by the setup scripts
 export COMFY_DIR="${COMFY_DIR:-/workspace/ComfyUI}"
 
+# Extra args appended to the ComfyUI launch command (space-separated). Tune
+# per-pod without rebuilding. The default is a safe, robust baseline:
+#   --reserve-vram 1     reserve ~1GB VRAM (avoid OOM under pressure)
+#   --max-upload-size    raise upload limit for large video/image inputs (MB)
+COMFY_ARGS="${COMFY_ARGS:---reserve-vram 1 --max-upload-size 1024}"
+
 echo "Using setup repo: $TARGET_REPO"
 
 # -----------------------------
@@ -63,10 +69,15 @@ start_jupyter() {
 # --- Function to start ComfyUI ---
 start_comfy() {
     echo "[INFO] Starting ComfyUI..."
+    # --enable-cors-header bypasses ComfyUI's strict host/origin check so the RunPod
+    # proxy works (see README troubleshooting). $COMFY_ARGS is intentionally unquoted
+    # so it word-splits into separate flags.
+    # shellcheck disable=SC2086
     python "$COMFY_DIR/main.py" \
         --listen 0.0.0.0 \
         --port 8188 \
-        --enable-cors-header '*' &  # bypass strict host/origin check so the RunPod proxy works (see README troubleshooting)
+        --enable-cors-header '*' \
+        $COMFY_ARGS &
     COMFY_PID=$!
     echo "[INFO] ComfyUI PID = $COMFY_PID started on port 8188"
 }

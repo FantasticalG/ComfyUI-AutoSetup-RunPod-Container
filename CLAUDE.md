@@ -39,9 +39,10 @@ explicitly asked — the user reviews and commits everything.
 - **`docker-compose.yaml`** — uses **`COMFY_DIR`** (the entrypoint reads `COMFY_DIR`,
   **not** `INSTALL_DIR`). Default install dir `/workspace/ComfyUI`.
 - **Env vars:** `SETUP_REPO` (use a fork), `SKIP_UPDATE` (skip install on reboot),
-  `COMFY_DIR`, `TARGET_DATE`, `HUGGINGFACE_API_KEY`, `CIVITAI_API_KEY`.
-- ComfyUI launches with `--enable-cors-header '*'` so the RunPod proxy works
-  (recent ComfyUI enforces strict host/origin matching → 403 otherwise).
+  `COMFY_DIR`, `TARGET_DATE`, `HUGGINGFACE_API_KEY`, `CIVITAI_API_KEY`, `SKIP_MODELS`,
+  `COMFY_ARGS`.
+- ComfyUI launches with `--listen 0.0.0.0 --port 8188 --enable-cors-header '*'` plus
+  `$COMFY_ARGS` (unquoted on purpose → word-splits into flags).
 - **RunPod proxy URLs are public** (not gated by login) — don't describe them as
   authenticated. JupyterLab runs with no token by default; only persistent data
   under `/workspace` survives restarts.

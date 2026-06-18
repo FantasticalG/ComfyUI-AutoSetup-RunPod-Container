@@ -19,6 +19,8 @@ services:
       HUGGINGFACE_API_KEY: "${HUGGINGFACE_API_KEY}"
       # Optional model-download skip filter, e.g. "wan,animate;sdxl" (empty = all)
       SKIP_MODELS: "${SKIP_MODELS:-}"
+      # Extra ComfyUI launch flags; empty = entrypoint baseline (--reserve-vram 1 --max-upload-size 1024)
+      COMFY_ARGS: "${COMFY_ARGS:-}"
 
     ports:
       - "8188:8188"   # ComfyUI

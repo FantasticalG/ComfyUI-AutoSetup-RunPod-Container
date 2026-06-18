@@ -66,6 +66,24 @@ docker compose up --build
 | `CIVITAI_API_KEY` | Token for CivitAI model downloads | not set |
 | `HUGGINGFACE_API_KEY` | Token for HuggingFace downloads | not set |
 | `SKIP_MODELS` | Skip models whose URL/filename matches the filter, e.g. `wan,animate;qwen` (`;` = OR groups, `,` = AND within a group) | not set (download all) |
+| `COMFY_ARGS` | Extra flags appended to the ComfyUI launch command (space-separated). Empty uses the built-in baseline. | `--reserve-vram 1 --max-upload-size 1024` |
+
+## Performance tuning (`COMFY_ARGS`)
+
+ComfyUI is launched with `--listen 0.0.0.0 --port 8188 --enable-cors-header '*'` plus whatever
+`COMFY_ARGS` contains. The baseline default — `--reserve-vram 1 --max-upload-size 1024` — reserves
+~1 GB VRAM (fewer out-of-memory crashes under pressure) and raises the upload limit from 100 MB so
+large video/image inputs work. Override `COMFY_ARGS` per-pod to tune, for example:
+
+- `--cache-lru 10` — cache N node results for faster iterative re-runs (uses more RAM/VRAM).
+- `--fast fp16_accumulation` — faster fp16 matmuls on recent GPUs (mildly experimental).
+- `--fp32-vae` / `--bf16-vae` — fix black/NaN images caused by VAE precision.
+- `--preview-method auto` — live previews in the sampler (small compute cost).
+
+> **SageAttention:** the image ships SageAttention, but it is **not** enabled globally. The
+> `--use-sage-attention` flag is start-up-global and **cannot be turned off at runtime**, and some
+> models misbehave under it — so control it **per-workflow** with a node (e.g. KJNodes *Patch Sage
+> Attention*) instead. Only add `--use-sage-attention` to `COMFY_ARGS` if you do not use such a node.
 
 ## Accessing the services
 
