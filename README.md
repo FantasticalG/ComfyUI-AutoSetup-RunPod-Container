@@ -65,7 +65,8 @@ docker compose up --build
 | `TARGET_DATE` | Target date for deterministic installs (`yyyy-mm-dd`) | latest commit in the setup repo |
 | `CIVITAI_API_KEY` | Token for CivitAI model downloads | not set |
 | `HUGGINGFACE_API_KEY` | Token for HuggingFace downloads | not set |
-| `SKIP_MODELS` | Skip models whose URL/filename matches the filter, e.g. `wan,animate;qwen` (`;` = OR groups, `,` = AND within a group) | not set (download all) |
+| `SKIP_MODEL_FILES` | Skip individual models by URL/filename, e.g. `wan,t2v;qwen` (`;` = OR groups, `,` = AND within a group) | not set (download all) |
+| `SKIP_MODEL_DIRS` | Skip whole target folders by final folder name, e.g. `qwen;sdxl` | not set (download all) |
 | `COMFY_ARGS` | Extra flags appended to the ComfyUI launch command (space-separated). Empty uses the built-in baseline. | `--reserve-vram 1 --max-upload-size 1024` |
 
 ## Performance tuning (`COMFY_ARGS`)

@@ -17,8 +17,11 @@ services:
       SKIP_UPDATE: "0"
       CIVITAI_API_KEY: "${CIVITAI_API_KEY}"
       HUGGINGFACE_API_KEY: "${HUGGINGFACE_API_KEY}"
-      # Optional model-download skip filter, e.g. "wan,animate;sdxl" (empty = all)
-      SKIP_MODELS: "${SKIP_MODELS:-}"
+      # Optional model-download skip filters (empty = download all):
+      #   SKIP_MODEL_FILES — by URL/filename, e.g. "wan,t2v;sdxl"
+      #   SKIP_MODEL_DIRS  — by target folder name, e.g. "qwen;sdxl"
+      SKIP_MODEL_FILES: "${SKIP_MODEL_FILES:-}"
+      SKIP_MODEL_DIRS: "${SKIP_MODEL_DIRS:-}"
       # Extra ComfyUI launch flags; empty = entrypoint baseline (--reserve-vram 1 --max-upload-size 1024)
       COMFY_ARGS: "${COMFY_ARGS:-}"
 
