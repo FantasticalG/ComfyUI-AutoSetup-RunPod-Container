@@ -21,6 +21,7 @@ The image is designed to run as a RunPod GPU pod.
      - `SKIP_UPDATE=1` — skip the install/update step on subsequent boots once everything is in place (much faster startup).
      - `SETUP_REPO` — point at your own fork of the setup script to control which extensions/models/workflows get installed.
      - `TARGET_DATE` — pin a deterministic build date.
+     - `COMFY_DIR=/workspace/ComfyUI` — recommended. The entrypoint defaults to this for the install, but setting it as a template var makes it visible to interactive shells too, so **manual** runs of the install scripts (in a Jupyter/SSH terminal) target the right directory instead of `$PWD/ComfyUI`.
 
 3. **First boot is slow.** The entrypoint clones the setup repo and runs the full install (ComfyUI + extensions + models). Expect a long first start while large models download. Subsequent boots with `SKIP_UPDATE=1` skip straight to launching the services.
 
