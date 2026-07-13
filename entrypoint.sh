@@ -61,7 +61,9 @@ start_jupyter() {
         --ServerApp.password='' \
         --ServerApp.allow_origin='*' \
         --ServerApp.disable_check_xsrf=True \
-        --ServerApp.allow_remote_access=True &
+        --ServerApp.allow_remote_access=True \
+        --FileContentsManager.delete_to_trash=False \
+        --FileContentsManager.always_delete_dir=True &  # delete permanently (send2trash fails in containers) + allow non-empty dirs
     JUPYTER_PID=$!
     echo "[INFO] JupyterLab PID = $JUPYTER_PID started on port 8888"
 }
